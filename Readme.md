@@ -63,21 +63,22 @@
 * 针对 wxml 实现并且配置了函数 `wxmlcomplete#Complete`, 它能提供标签、
   属性、属性值的智能补全（官方 IDE 仅支持标签）
 
-* 针对 javscript 本插件提供了 [tern](https://github.com/ternjs/tern)
-  的插件，内含所有 wx 相关 API 的函数补全，使用前需要首先安装 
-  [tern-for-vim](https://github.com/ternjs/tern_for_vim)
-  插件。
-
-  在 tern-for-vim 插件下执行：
-  
-        npm install https://github.com/ternjs/tern/tarball/master -S
-
-  命令安装 tern。
-
-  **npm 上的 tern 还不支持参数内属性补全，请安装使用 master 分支**
-
-  将文件 `tern/wxapp.json` 拷贝到所有 小程序项目的父目录下，
-  最后在小程序项目的根目录下配置文件 `.tern-project` 为：
+* 针对 javscript 本插件提供了 [tern](https://github.com/ternjs/tern) 的插件，内含所有 wx 相关 API 的函数补全。
+  - 安装tern_for_vim
+  - 在.vim/vimfile/bundle/tern_for_vim/目录下执行： npm install https://github.com/ternjs/tern/tarball/master -S
+  - 在.vimrc 中添加以下配置
+         let tern_show_signature_in_pum = 1                                               
+         let tern_show_argument_hints = 'on_hold'                                         
+         autocmd FileType javascript setlocal omnifunc=tern#Complete 
+  - 将.vim/vimfile/bundle/wxapp.vim/tern/wxapp.json 拷贝到 .vim/vimfile/tern_for_vim/node_modules/tern/defs/目录下（这样就不用在每个项目父目录在放一个wxapp.json了）
+* 针对tern的配置（主要是可以看相关函数的定义以及可以直接跳转到定义的url指向的文档）
+  - cp .vim/vimfile/tern_for_vim/node_modules/tern/defs/wxapp.json  .vim/vimfile/tern_for_vim/node_modules/tern/plugins/wxapp.js
+  - 打开 .vim/vimfile/tern_for_vim/node_modules/tern/plugins/wxapp.js （整个文件内容在一对大括号内 {...}) 修改为：
+     var defs = {...}
+     server.addDefs(defs)
+  处理完之后，就可以使用 TernDoc/TernDef查看wxapp.js中对应的定义，使用TernDocBrowser可直接打开默认浏览器跳转到光标所在的关键字对应的文档url。
+        
+  最后在小程序项目的根目录下配置文件 `.tern-project` 为：
 
   ``` json
   {
